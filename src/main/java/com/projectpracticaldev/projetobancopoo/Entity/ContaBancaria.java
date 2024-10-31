@@ -94,7 +94,7 @@ public class ContaBancaria implements Conta {
         }
         
         if( this.saldo - valor < 0){
-            return new SimpleEntry<>(true, "O valor do saque é inviavel!");
+            return new SimpleEntry<>(false, "O valor do saque é inviavel!");
         }
         
         this.saldo -= valor;
@@ -119,7 +119,7 @@ public class ContaBancaria implements Conta {
         }
         
         if( this.saldo - valor < 0){
-            return new SimpleEntry<>(true, "A conta não tem saldo para essa transferencia!");
+            return new SimpleEntry<>(false, "A conta não tem saldo para essa transferencia!");
         }
         
         this.saldo -= valor;
