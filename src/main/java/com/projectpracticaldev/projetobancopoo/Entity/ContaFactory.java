@@ -26,9 +26,8 @@ public class ContaFactory {
         return new ContaEspecial(numero, agencia, cliente, saldo, ativa, listaHistorico, limite);
     }
 
-    public static Conta criarContaPoupanca(Integer numero, Integer agencia, String cliente,
-            LocalDateTime dataUltimaMovimentacao, Double taxaJuros) {
-        return new ContaPoupanca(numero, agencia, cliente, 0.0, true, new ArrayList<>(), dataUltimaMovimentacao,
+    public static Conta criarContaPoupanca(Integer numero, Integer agencia, String cliente, Double taxaJuros) {
+        return new ContaPoupanca(numero, agencia, cliente, 0.0, true, new ArrayList<>(), null,
                 taxaJuros);
     }
 
