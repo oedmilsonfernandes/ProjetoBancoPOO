@@ -1,6 +1,6 @@
 package com.projectpracticaldev.projetobancopoo.Entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.AbstractMap.SimpleEntry;
 
@@ -35,7 +35,7 @@ public class ContaEspecial extends ContaBancaria{
         super.setSaldo(super.getSaldo() - valor);
 
         List<Historico> lh = super.getListaHistorico();
-        lh.add(new Historico("Saque",new Date(), valor));
+        lh.add(new Historico("Saque", LocalDateTime.now(), valor));
         super.setListaHistorico(lh);
         
         return new SimpleEntry<>(true, null);
@@ -54,7 +54,7 @@ public class ContaEspecial extends ContaBancaria{
         super.setSaldo(super.getSaldo() - valor);
 
         List<Historico> lh = super.getListaHistorico();
-        lh.add(new Historico("Transferencia",new Date(), valor));
+        lh.add(new Historico("Transferencia", LocalDateTime.now(), valor));
         super.setListaHistorico(lh);
         
         return new SimpleEntry<>(true, null);

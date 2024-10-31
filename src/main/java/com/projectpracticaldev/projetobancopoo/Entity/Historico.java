@@ -1,5 +1,5 @@
 package com.projectpracticaldev.projetobancopoo.Entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
-public record Historico(String tipoMovimentacao, Date dataMovimentacao, Double valor) {}
+public record Historico(String tipoMovimentacao, LocalDateTime dataMovimentacao, Double valor) {}

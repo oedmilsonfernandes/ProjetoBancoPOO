@@ -4,7 +4,7 @@
  */
 package com.projectpracticaldev.projetobancopoo.Entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.AbstractMap.SimpleEntry;
 
@@ -83,7 +83,7 @@ public class ContaBancaria implements Conta {
             this.saldo += valor;
             return new SimpleEntry<>(true, null);
         }
-        this.listaHistorico.add(new Historico("Deposito",new Date(), valor));
+        this.listaHistorico.add(new Historico("Deposito", LocalDateTime.now(), valor));
         return new SimpleEntry<>(false, "O valor do deposito é negativo!");
     }
 
@@ -98,7 +98,7 @@ public class ContaBancaria implements Conta {
         }
         
         this.saldo -= valor;
-        this.listaHistorico.add(new Historico("Saque",new Date(), valor));
+        this.listaHistorico.add(new Historico("Saque", LocalDateTime.now(), valor));
         return new SimpleEntry<>(true, null);
     }
 
@@ -123,7 +123,7 @@ public class ContaBancaria implements Conta {
         }
         
         this.saldo -= valor;
-        this.listaHistorico.add(new Historico("Transferencia",new Date(), valor));
+        this.listaHistorico.add(new Historico("Transferencia", LocalDateTime.now(), valor));
         return new SimpleEntry<>(true, null);
     }
 
