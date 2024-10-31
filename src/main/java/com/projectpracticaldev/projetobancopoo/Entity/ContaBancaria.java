@@ -113,17 +113,45 @@ public class ContaBancaria implements Conta {
     }
 
     @Override
-    public SimpleEntry<Boolean, String> transferir(Double valor) {
+    public SimpleEntry<Boolean, String> transferir(Double valor, ContaBancaria destino) {
         if(valor < 0){
             return new SimpleEntry<>(false, "O valor da transferencia é negativo!");
         }
         
         if( this.saldo - valor < 0){
-            return new SimpleEntry<>(true, "O valor da transferencia é inviavel!");
+            return new SimpleEntry<>(true, "A conta não tem saldo para essa transferencia!");
         }
         
         this.saldo -= valor;
-        this.listaHistorico.add(new Historico("Transferencia", LocalDateTime.now(), valor));
+        Historico h = new Historico(
+            String.format("Transferencia para {numero: %d, agencia: %d, cliente: %s}",
+                destino.getNumero(), destino.getAgencia(), destino.getCliente()),
+            LocalDateTime.now(), valor);
+        this.listaHistorico.add(h);
+        
+        DadosBancarios remetente = new DadosBancarios(numero, agencia, cliente);
+        SimpleEntry<Boolean, String> transferido = destino.receberTransferencia(valor, remetente);
+
+        if(!transferido.getKey()){
+            this.saldo += valor;
+            this.listaHistorico.remove(h);
+            return transferido;
+        }
+
+        return new SimpleEntry<>(true, null);
+    }
+
+    @Override
+    public SimpleEntry<Boolean, String> receberTransferencia(Double valor, DadosBancarios remetente) {
+        if(valor < 0){
+            return new SimpleEntry<>(false, "O valor da transferencia é negativo!");
+        }
+
+        this.saldo += valor;
+        this.listaHistorico.add(new Historico(
+            String.format("Transferencia de {numero: %d, agencia: %d, cliente: %s}",
+                remetente.numero(), remetente.agencia(), remetente.cliente()),
+            LocalDateTime.now(), valor));
         return new SimpleEntry<>(true, null);
     }
 
