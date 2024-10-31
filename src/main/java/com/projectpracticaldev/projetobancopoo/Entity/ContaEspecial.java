@@ -42,21 +42,34 @@ public class ContaEspecial extends ContaBancaria{
     }
 
     @Override
-    public SimpleEntry<Boolean, String> transferir(Double valor) {
+    public SimpleEntry<Boolean, String> transferir(Double valor, ContaBancaria destino) {
         if(valor < 0){
             return new SimpleEntry<>(false, "O valor da transferencia é negativo!");
         }
         
         if(super.getSaldo() + this.limite - valor < 0){
-            return new SimpleEntry<>(false, "O valor da transferencia é inviavel!");
+            return new SimpleEntry<>(false, "A conta não tem saldo para essa transferencia!");
         }
         
         super.setSaldo(super.getSaldo() - valor);
 
         List<Historico> lh = super.getListaHistorico();
-        lh.add(new Historico("Transferencia", LocalDateTime.now(), valor));
+        Historico h = new Historico(
+            String.format("Transferencia para {numero: %d, agencia: %d, cliente: %s}",
+                destino.getNumero(), destino.getAgencia(), destino.getCliente()),
+            LocalDateTime.now(), valor);
+        lh.add(h);
+
+        DadosBancarios remetente = new DadosBancarios(super.getNumero(), super.getAgencia(), super.getCliente());
+        SimpleEntry<Boolean, String> transferido = destino.receberTransferencia(valor, remetente);
+
+        if(!transferido.getKey()){
+            super.setSaldo(super.getSaldo() + valor);
+            lh.remove(h);
+            return transferido;
+        }
+
         super.setListaHistorico(lh);
-        
         return new SimpleEntry<>(true, null);
     }
 
