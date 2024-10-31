@@ -4,7 +4,7 @@
 
 package com.projectpracticaldev.projetobancopoo;
 
-import java.util.AbstractMap.SimpleEntry;
+import com.projectpracticaldev.utils.Resultado;
 import java.util.List;
 
 import com.projectpracticaldev.projetobancopoo.Entity.Conta;
@@ -21,16 +21,16 @@ public class ProjetoBancoPOO {
     public static void main(String[] args) {
         //################## Demonstração de Conta Bancaria #######################################################
         Conta cb = ContaFactory.criarContaBancaria(1, 200, "Rafael Borges");
-        SimpleEntry<Boolean, String> depositado1 = cb.depositar(500.0);
+        Resultado<Boolean> depositado1 = cb.depositar(500.0);
 
-        if (depositado1.getKey() == false) {
-            System.out.println("Deu erro no deposito da conta bancaria: " + depositado1.getValue());
+        if (depositado1.retorno() == false) {
+            System.out.println("Deu erro no deposito da conta bancaria: " + depositado1.erro());
             return;
         }
-        SimpleEntry<Boolean, String> saque1 = cb.sacar(50.0);
+        Resultado<Boolean> saque1 = cb.sacar(50.0);
 
-        if (saque1.getKey() == false) {
-            System.out.println("Deu erro no saque da conta bancaria: " + saque1.getValue());
+        if (saque1.retorno() == false) {
+            System.out.println("Deu erro no saque da conta bancaria: " + saque1.erro());
             return;
         }
         
@@ -44,26 +44,26 @@ public class ProjetoBancoPOO {
 
         //################## Demonstração de Conta Especial #######################################################
         Conta ce = ContaFactory.criarContaEspecial(1, 200, "Rafael Borges", 500.0);
-        SimpleEntry<Boolean, String> depositado2 = ce.depositar(500.0);
+        Resultado<Boolean> depositado2 = ce.depositar(500.0);
 
-        if (depositado2.getKey() == false) {
-            System.out.println("Deu erro no deposito na Conta Especial: " + depositado2.getValue());
+        if (depositado2.retorno() == false) {
+            System.out.println("Deu erro no deposito na Conta Especial: " + depositado2.erro());
             return;
         }
-        SimpleEntry<Boolean, String> saque2 = ce.sacar(600.0);
+        Resultado<Boolean> saque2 = ce.sacar(600.0);
 
-        if (saque2.getKey() == false) {
-            System.out.println("Deu erro no saque na Conta Especial: " + saque2.getValue());
+        if (saque2.retorno() == false) {
+            System.out.println("Deu erro no saque na Conta Especial: " + saque2.erro());
             return;
         }
 
         System.out.println("Saldo da conta bancaria: " + ((ContaBancaria)cb).getSaldo());
         System.out.println("Saldo da conta especial: " + ((ContaBancaria)ce).getSaldo());
 
-        SimpleEntry<Boolean, String> transferido = cb.transferir(100.0, (ContaBancaria)ce);
+        Resultado<Boolean> transferido = cb.transferir(100.0, (ContaBancaria)ce);
 
-        if (transferido.getKey() == false) {
-            System.out.println("Deu erro na transferia para Conta Especial: " + transferido.getValue());
+        if (transferido.retorno() == false) {
+            System.out.println("Deu erro na transferia para Conta Especial: " + transferido.erro());
             return;
         } else {
             System.out.println("Saldo da conta bancaria: " + ((ContaBancaria)cb).getSaldo());
@@ -83,26 +83,26 @@ public class ProjetoBancoPOO {
 
         //################## Demonstração de Conta poupança #######################################################
         Conta cp = ContaFactory.criarContaPoupanca(1, 200, "Rafael Borges", 0.005);
-        SimpleEntry<Boolean, String> depositado3 = cp.depositar(500.0);
+        Resultado<Boolean> depositado3 = cp.depositar(500.0);
 
-        if (depositado3.getKey() == false) {
-            System.out.println("Deu erro no deposito na Conta Poupança: " + depositado3.getValue());
+        if (depositado3.retorno() == false) {
+            System.out.println("Deu erro no deposito na Conta Poupança: " + depositado3.erro());
             return;
         }
-        SimpleEntry<Boolean, String> saque3 = cp.sacar(500.0);
+        Resultado<Boolean> saque3 = cp.sacar(500.0);
 
-        if (saque3.getKey() == false) {
-            System.out.println("Deu erro no saque na Conta Poupança: " + saque3.getValue());
+        if (saque3.retorno() == false) {
+            System.out.println("Deu erro no saque na Conta Poupança: " + saque3.erro());
             return;
         }
 
         System.out.println("Saldo da conta bancaria: " + ((ContaBancaria)cb).getSaldo());
         System.out.println("Saldo da conta especial: " + ((ContaBancaria)cp).getSaldo());
 
-        SimpleEntry<Boolean, String> transferido2 = ce.transferir(100.0, (ContaBancaria)cp);
+        Resultado<Boolean> transferido2 = ce.transferir(100.0, (ContaBancaria)cp);
 
-        if (transferido2.getKey() == false) {
-            System.out.println("Deu erro na transferia para Conta Poupança: " + transferido2.getValue());
+        if (transferido2.retorno() == false) {
+            System.out.println("Deu erro na transferia para Conta Poupança: " + transferido2.erro());
             return;
         } else {
             System.out.println("Saldo da conta bancaria: " + ((ContaBancaria)cb).getSaldo());

@@ -6,7 +6,7 @@ package com.projectpracticaldev.projetobancopoo.Entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.AbstractMap.SimpleEntry;
+import com.projectpracticaldev.utils.Resultado;
 
 /**
  *
@@ -78,28 +78,28 @@ public class ContaBancaria implements Conta {
     }
 
     @Override
-    public SimpleEntry<Boolean, String> depositar(Double valor) {
+    public Resultado<Boolean> depositar(Double valor) {
         if(valor < 0){
-            return new SimpleEntry<>(false, "O valor do deposito é negativo!");
+            return new Resultado<Boolean>(false, "O valor do deposito é negativo!");
         }
         this.saldo += valor;
         this.listaHistorico.add(new Historico("Deposito", LocalDateTime.now(), valor));
-        return new SimpleEntry<>(true, null);
+        return new Resultado<Boolean>(true, null);
     }
 
     @Override
-    public SimpleEntry<Boolean, String> sacar(Double valor) {
+    public Resultado<Boolean> sacar(Double valor) {
         if(valor < 0){
-            return new SimpleEntry<>(false, "O valor do saque é negativo!");
+            return new Resultado<Boolean>(false, "O valor do saque é negativo!");
         }
         
         if( this.saldo - valor < 0){
-            return new SimpleEntry<>(false, "O valor do saque é inviavel!");
+            return new Resultado<Boolean>(false, "O valor do saque é inviavel!");
         }
         
         this.saldo -= valor;
         this.listaHistorico.add(new Historico("Saque", LocalDateTime.now(), valor));
-        return new SimpleEntry<>(true, null);
+        return new Resultado<Boolean>(true, null);
     }
 
     @Override
@@ -113,13 +113,13 @@ public class ContaBancaria implements Conta {
     }
 
     @Override
-    public SimpleEntry<Boolean, String> transferir(Double valor, ContaBancaria destino) {
+    public Resultado<Boolean> transferir(Double valor, ContaBancaria destino) {
         if(valor < 0){
-            return new SimpleEntry<>(false, "O valor da transferencia é negativo!");
+            return new Resultado<Boolean>(false, "O valor da transferencia é negativo!");
         }
         
         if( this.saldo - valor < 0){
-            return new SimpleEntry<>(false, "A conta não tem saldo para essa transferencia!");
+            return new Resultado<Boolean>(false, "A conta não tem saldo para essa transferencia!");
         }
         
         this.saldo -= valor;
@@ -130,21 +130,21 @@ public class ContaBancaria implements Conta {
         this.listaHistorico.add(h);
         
         DadosBancarios remetente = new DadosBancarios(numero, agencia, cliente);
-        SimpleEntry<Boolean, String> transferido = destino.receberTransferencia(valor, remetente);
+        Resultado<Boolean> transferido = destino.receberTransferencia(valor, remetente);
 
-        if(!transferido.getKey()){
+        if(!transferido.retorno()){
             this.saldo += valor;
             this.listaHistorico.remove(h);
             return transferido;
         }
 
-        return new SimpleEntry<>(true, null);
+        return new Resultado<Boolean>(true, null);
     }
 
     @Override
-    public SimpleEntry<Boolean, String> receberTransferencia(Double valor, DadosBancarios remetente) {
+    public Resultado<Boolean> receberTransferencia(Double valor, DadosBancarios remetente) {
         if(valor < 0){
-            return new SimpleEntry<>(false, "O valor da transferencia é negativo!");
+            return new Resultado<Boolean>(false, "O valor da transferencia é negativo!");
         }
 
         this.saldo += valor;
@@ -152,30 +152,30 @@ public class ContaBancaria implements Conta {
             String.format("Transferencia de {numero: %d, agencia: %d, cliente: %s}",
                 remetente.numero(), remetente.agencia(), remetente.cliente()),
             LocalDateTime.now(), valor));
-        return new SimpleEntry<>(true, null);
+        return new Resultado<Boolean>(true, null);
     }
 
     @Override
-    public SimpleEntry<Boolean, String> bloquearConta() {
+    public Resultado<Boolean> bloquearConta() {
         if(this.saldo > 0){
-            return new SimpleEntry<>(false, "Ainda há saldo!");
+            return new Resultado<Boolean>(false, "Ainda há saldo!");
         }
 
         if(this.ativa == false){
-            return new SimpleEntry<>(false, "Conta já está bloqueada");
+            return new Resultado<Boolean>(false, "Conta já está bloqueada");
         }
 
         this.ativa = false;
-        return new SimpleEntry<>(true, null);
+        return new Resultado<Boolean>(true, null);
     }
 
     @Override
-    public SimpleEntry<Boolean, String> desbloquearConta() {
+    public Resultado<Boolean> desbloquearConta() {
         if(this.ativa == true){
-            return new SimpleEntry<>(false, "Conta já está desbloqueada");
+            return new Resultado<Boolean>(false, "Conta já está desbloqueada");
         }
 
         this.ativa = true;
-        return new SimpleEntry<>(true, null);
+        return new Resultado<Boolean>(true, null);
     }
 }

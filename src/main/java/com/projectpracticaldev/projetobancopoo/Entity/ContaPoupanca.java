@@ -3,7 +3,7 @@ package com.projectpracticaldev.projetobancopoo.Entity;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.AbstractMap.SimpleEntry;
+import com.projectpracticaldev.utils.Resultado;
 
 public class ContaPoupanca extends ContaBancaria implements Aplicacao{
     private LocalDateTime dataUltimaMovimentacao;
@@ -33,13 +33,13 @@ public class ContaPoupanca extends ContaBancaria implements Aplicacao{
     }
 
     @Override
-    public SimpleEntry<Boolean, String> calcularRendimento(LocalDateTime hoje) {
+    public Resultado<Boolean> calcularRendimento(LocalDateTime hoje) {
         if(!super.getAtiva()){
-            return new SimpleEntry<>(false, "Conta bloqueada!");
+            return new Resultado<Boolean>(false, "Conta bloqueada!");
         }
 
         if(!hoje.isAfter(this.dataUltimaMovimentacao)){
-            return new SimpleEntry<>(false, "Data para o calculo invalida!");
+            return new Resultado<Boolean>(false, "Data para o calculo invalida!");
         }
 
         // Calculando a diferença em meses
@@ -49,57 +49,57 @@ public class ContaPoupanca extends ContaBancaria implements Aplicacao{
         long difDias = ChronoUnit.DAYS.between(this.dataUltimaMovimentacao.plusMonths(difMeses), hoje);
 
         if(difMeses < 1 || difDias != 0){
-            return new SimpleEntry<>(false, "Não virou o mês ainda para fazer o calculo!");
+            return new Resultado<Boolean>(false, "Não virou o mês ainda para fazer o calculo!");
         }
 
         Double novoSaldo = super.getSaldo() * Math.pow((1 + this.taxaJuros), difMeses);
         super.setSaldo(novoSaldo);
-        return new SimpleEntry<>(true, null);
+        return new Resultado<Boolean>(true, null);
     }
 
 
     @Override
-    public SimpleEntry<Boolean, String> depositar(Double valor) {
-        SimpleEntry<Boolean, String> deposito = super.depositar(valor);
+    public Resultado<Boolean> depositar(Double valor) {
+        Resultado<Boolean> deposito = super.depositar(valor);
 
-        if(!deposito.getKey()){
+        if(!deposito.retorno()){
             return deposito;
         }
         this.dataUltimaMovimentacao = LocalDateTime.now();
-        return new SimpleEntry<>(true, null);
+        return new Resultado<Boolean>(true, null);
     }
 
     @Override
-    public SimpleEntry<Boolean, String> sacar(Double valor) {
-        SimpleEntry<Boolean, String> saque = super.sacar(valor);
+    public Resultado<Boolean> sacar(Double valor) {
+        Resultado<Boolean> saque = super.sacar(valor);
 
-        if(!saque.getKey()){
+        if(!saque.retorno()){
             return saque;
         }
         this.dataUltimaMovimentacao = LocalDateTime.now();
-        return new SimpleEntry<>(true, null);
+        return new Resultado<Boolean>(true, null);
     }
 
     @Override
-    public SimpleEntry<Boolean, String> transferir(Double valor, ContaBancaria destino) {
-        SimpleEntry<Boolean, String> transferencia = super.transferir(valor, destino);
+    public Resultado<Boolean> transferir(Double valor, ContaBancaria destino) {
+        Resultado<Boolean> transferencia = super.transferir(valor, destino);
 
-        if(!transferencia.getKey()){
+        if(!transferencia.retorno()){
             return transferencia;
         }
         this.dataUltimaMovimentacao = LocalDateTime.now();
-        return new SimpleEntry<>(true, null);
+        return new Resultado<Boolean>(true, null);
     }
 
     @Override
-    public SimpleEntry<Boolean, String> receberTransferencia(Double valor, DadosBancarios remetente) {
-        SimpleEntry<Boolean, String> transferido = super.receberTransferencia(valor, remetente);
+    public Resultado<Boolean> receberTransferencia(Double valor, DadosBancarios remetente) {
+        Resultado<Boolean> transferido = super.receberTransferencia(valor, remetente);
 
-        if(!transferido.getKey()){
+        if(!transferido.retorno()){
             return transferido;
         }
         this.dataUltimaMovimentacao = LocalDateTime.now();
-        return new SimpleEntry<>(true, null);
+        return new Resultado<Boolean>(true, null);
     }
 
 }

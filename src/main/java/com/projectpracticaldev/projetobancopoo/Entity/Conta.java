@@ -1,15 +1,15 @@
 package com.projectpracticaldev.projetobancopoo.Entity;
 
 import java.util.List;
-import java.util.AbstractMap.SimpleEntry;
+import com.projectpracticaldev.utils.Resultado;
 
 public interface Conta {
-    public SimpleEntry<Boolean, String> depositar(Double valor);
-    public SimpleEntry<Boolean, String> sacar(Double valor);
+    public Resultado<Boolean> depositar(Double valor);
+    public Resultado<Boolean> sacar(Double valor);
     public Double exibirSaldo();
     public List<Historico> exibirExtrato();
-    public SimpleEntry<Boolean, String> transferir(Double valor, ContaBancaria destino);
-    public SimpleEntry<Boolean, String> receberTransferencia(Double valor, DadosBancarios remetente);
-    public SimpleEntry<Boolean, String> bloquearConta();
-    public SimpleEntry<Boolean, String> desbloquearConta();
+    public Resultado<Boolean> transferir(Double valor, ContaBancaria destino);
+    public Resultado<Boolean> receberTransferencia(Double valor, DadosBancarios remetente);
+    public Resultado<Boolean> bloquearConta();
+    public Resultado<Boolean> desbloquearConta();
 }

@@ -1,9 +1,9 @@
 package com.projectpracticaldev.projetobancopoo.Entity;
 
 import java.time.LocalDateTime;
-import java.util.AbstractMap.SimpleEntry;
+import com.projectpracticaldev.utils.Resultado;
 
 public interface Aplicacao {
 
-    public SimpleEntry<Boolean, String> calcularRendimento(LocalDateTime hoje);
+    public Resultado<Boolean> calcularRendimento(LocalDateTime hoje);
 }
