@@ -81,11 +81,22 @@ public class ContaPoupanca extends ContaBancaria implements Aplicacao{
     }
 
     @Override
-    public SimpleEntry<Boolean, String> transferir(Double valor) {
-        SimpleEntry<Boolean, String> transferencia = super.transferir(valor);
+    public SimpleEntry<Boolean, String> transferir(Double valor, ContaBancaria destino) {
+        SimpleEntry<Boolean, String> transferencia = super.transferir(valor, destino);
 
         if(!transferencia.getKey()){
             return transferencia;
+        }
+        this.dataUltimaMovimentacao = LocalDateTime.now();
+        return new SimpleEntry<>(true, null);
+    }
+
+    @Override
+    public SimpleEntry<Boolean, String> receberTransferencia(Double valor, DadosBancarios remetente) {
+        SimpleEntry<Boolean, String> transferido = super.receberTransferencia(valor, remetente);
+
+        if(!transferido.getKey()){
+            return transferido;
         }
         this.dataUltimaMovimentacao = LocalDateTime.now();
         return new SimpleEntry<>(true, null);
