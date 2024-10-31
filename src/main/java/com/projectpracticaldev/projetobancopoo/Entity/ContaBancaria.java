@@ -79,12 +79,12 @@ public class ContaBancaria implements Conta {
 
     @Override
     public SimpleEntry<Boolean, String> depositar(Double valor) {
-        if(valor >= 0){
-            this.saldo += valor;
-            return new SimpleEntry<>(true, null);
+        if(valor < 0){
+            return new SimpleEntry<>(false, "O valor do deposito é negativo!");
         }
+        this.saldo += valor;
         this.listaHistorico.add(new Historico("Deposito", LocalDateTime.now(), valor));
-        return new SimpleEntry<>(false, "O valor do deposito é negativo!");
+        return new SimpleEntry<>(true, null);
     }
 
     @Override
