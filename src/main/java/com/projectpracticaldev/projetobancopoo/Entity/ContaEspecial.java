@@ -29,7 +29,7 @@ public class ContaEspecial extends ContaBancaria{
         }
         
         if(super.getSaldo() + this.limite - valor < 0){
-            return new SimpleEntry<>(true, "O valor do saque é inviavel!");
+            return new SimpleEntry<>(false, "O valor do saque é inviavel!");
         }
         
         super.setSaldo(super.getSaldo() - valor);
@@ -48,7 +48,7 @@ public class ContaEspecial extends ContaBancaria{
         }
         
         if(super.getSaldo() + this.limite - valor < 0){
-            return new SimpleEntry<>(true, "O valor da transferencia é inviavel!");
+            return new SimpleEntry<>(false, "O valor da transferencia é inviavel!");
         }
         
         super.setSaldo(super.getSaldo() - valor);
