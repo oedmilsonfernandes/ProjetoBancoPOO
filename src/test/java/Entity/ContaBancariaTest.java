@@ -3,6 +3,7 @@ package Entity;
 import org.junit.jupiter.api.Test;
 
 import com.projectpracticaldev.projetobancopoo.Entity.ContaBancaria;
+import com.projectpracticaldev.projetobancopoo.Entity.DadosBancarios;
 import com.projectpracticaldev.utils.Resultado;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -108,5 +109,29 @@ public class ContaBancariaTest {
         assertEquals(true, c2.getListaHistorico().get(0).tipoMovimentacao().startsWith("Transferencia de"));
         assertEquals(100.0, c2.getListaHistorico().get(0).valor());
         assertEquals(100.0, c2.getSaldo());
+    }
+
+    @Test
+    public void naoDeveReceberTransferenciaPorTerValorNegativo(){
+        ContaBancaria c = createConta();
+        DadosBancarios destino = new DadosBancarios(2, 2, "Carinha que mora logo ali");
+        Resultado<Boolean> recebeuTansferencia = c.receberTransferencia(-100.0, destino);
+
+        assertEquals(false, recebeuTansferencia.retorno());
+        assertEquals("O valor da transferencia é negativo!", recebeuTansferencia.erro());
+        assertEquals(true, c.getListaHistorico().isEmpty());
+    }
+
+    @Test
+    public void deveReceberTransferencia(){
+        ContaBancaria c = createConta();
+        DadosBancarios destino = new DadosBancarios(2, 2, "Carinha que mora logo ali");
+        Resultado<Boolean> recebeuTansferencia = c.receberTransferencia(100.0, destino);
+
+        assertEquals(true, recebeuTansferencia.retorno());
+        assertEquals(100.0, c.getSaldo());
+        assertEquals(false, c.getListaHistorico().isEmpty());
+        assertEquals(true, c.getListaHistorico().get(0).tipoMovimentacao().startsWith("Transferencia de {numero: 2, agencia: 2, cliente: Carinha que mora logo ali}"));
+        assertEquals(100.0, c.getListaHistorico().get(0).valor());
     }
 }
