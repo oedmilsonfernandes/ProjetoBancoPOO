@@ -10,4 +10,12 @@
         <maven.compiler.release>17</maven.compiler.release>
         <exec.mainClass>com.projectpracticaldev.projetobancopoo.ProjetoBancoPOO</exec.mainClass>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.7.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
