@@ -158,11 +158,11 @@ public class ContaBancaria implements Conta {
     @Override
     public Resultado<Boolean> bloquearConta() {
         if(this.saldo > 0){
-            return new Resultado<Boolean>(false, "Ainda há saldo!");
+            return new Resultado<Boolean>(false, "A conta não pode ser bloqueada, pois ainda há saldo!");
         }
 
         if(this.ativa == false){
-            return new Resultado<Boolean>(false, "Conta já está bloqueada");
+            return new Resultado<Boolean>(false, "A conta não pode ser bloqueada, pois já está bloqueada!");
         }
 
         this.ativa = false;

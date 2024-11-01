@@ -134,4 +134,33 @@ public class ContaBancariaTest {
         assertEquals(true, c.getListaHistorico().get(0).tipoMovimentacao().startsWith("Transferencia de {numero: 2, agencia: 2, cliente: Carinha que mora logo ali}"));
         assertEquals(100.0, c.getListaHistorico().get(0).valor());
     }
+
+    @Test
+    public void naoDeveBloquearPorqueTemSaldo(){
+        ContaBancaria c = createConta();
+        c.depositar(100.0);
+        Resultado<Boolean> bloqueou = c.bloquearConta();
+
+        assertEquals(false, bloqueou.retorno());
+        assertEquals("A conta não pode ser bloqueada, pois ainda há saldo!", bloqueou.erro());
+    }
+
+    @Test
+    public void naoDeveBloquearPorqueJaEstaBloqueada(){
+        ContaBancaria c = createConta();
+        c.setAtiva(false);
+        Resultado<Boolean> bloqueou = c.bloquearConta();
+
+        assertEquals(false, bloqueou.retorno());
+        assertEquals("A conta não pode ser bloqueada, pois já está bloqueada!", bloqueou.erro());
+    }
+
+    @Test
+    public void deveBloquear(){
+        ContaBancaria c = createConta();
+        Resultado<Boolean> bloqueou = c.bloquearConta();
+
+        assertEquals(true, bloqueou.retorno());
+        assertEquals(false, c.getAtiva());
+    }
 }
