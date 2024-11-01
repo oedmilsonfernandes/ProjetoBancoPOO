@@ -4,11 +4,7 @@
 
 package com.projectpracticaldev.projetobancopoo;
 
-import com.projectpracticaldev.utils.Resultado;
-import java.util.List;
-
 import com.projectpracticaldev.projetobancopoo.Entity.Conta;
-import com.projectpracticaldev.projetobancopoo.Entity.ContaBancaria;
 import com.projectpracticaldev.projetobancopoo.Entity.ContaFactory;
 import com.projectpracticaldev.projetobancopoo.Entity.Historico;
 
@@ -19,103 +15,67 @@ import com.projectpracticaldev.projetobancopoo.Entity.Historico;
 public class ProjetoBancoPOO {
 
     public static void main(String[] args) {
-        //################## Demonstração de Conta Bancaria #######################################################
-        Conta cb = ContaFactory.criarContaBancaria(1, 200, "Rafael Borges");
-        Resultado<Boolean> depositado1 = cb.depositar(500.0);
+        Conta primeiraCB = ContaFactory.criarContaBancaria(1, 1, "Carinha que mora logo ali");
+        Conta primeiraCE = ContaFactory.criarContaEspecial(2, 2, "Nelsinho que corre", 100.0);
+        Conta primeiraCP = ContaFactory.criarContaPoupanca(3,3,"Gaiato da Coca Cola",0.005);
 
-        if (depositado1.retorno() == false) {
-            System.out.println("Deu erro no deposito da conta bancaria: " + depositado1.erro());
-            return;
+        System.out.println("\nMostrando deposito:");
+
+        primeiraCB.depositar(10000.0);
+        primeiraCE.depositar(1000.0);
+        primeiraCP.depositar(100000.0);
+
+        System.out.println("Mostrar saldo da conta Bancaria: " + primeiraCB.exibirSaldo());
+        System.out.println("Mostrar saldo da conta Especial: " + primeiraCE.exibirSaldo());
+        System.out.println("Mostrar saldo da conta Poupanca: " + primeiraCP.exibirSaldo());
+        
+        System.out.println("\nMostrar extrato da conta Bancaria:");
+
+        for(Historico h: primeiraCB.exibirExtrato()){
+            System.out.printf("Tipo de Movimentação: %s, Data da Movimentação: %s, Valor da MOvimentação: %.2f\n",
+                h.tipoMovimentacao(), h.dataMovimentacao(), h.valor());
         }
-        Resultado<Boolean> saque1 = cb.sacar(50.0);
+        System.out.println("\nMostrar extrato da conta Especial:");
 
-        if (saque1.retorno() == false) {
-            System.out.println("Deu erro no saque da conta bancaria: " + saque1.erro());
-            return;
+        for(Historico h: primeiraCE.exibirExtrato()){
+            System.out.printf("Tipo de Movimentação: %s, Data da Movimentação: %s, Valor da MOvimentação: %.2f\n",
+                h.tipoMovimentacao(), h.dataMovimentacao(), h.valor());
+        }
+        System.out.println("\nMostrar extrato da conta Poupanca:");
+
+        for(Historico h: primeiraCP.exibirExtrato()){
+            System.out.printf("Tipo de Movimentação: %s, Data da Movimentação: %s, Valor da MOvimentação: %.2f\n",
+                h.tipoMovimentacao(), h.dataMovimentacao(), h.valor());
+        }
+
+        System.out.println("\nMostrando saque:");
+
+        primeiraCB.sacar(100.0);
+        primeiraCE.sacar(100.0);
+        primeiraCP.sacar(1000.0);
+
+        System.out.println("Mostrar saldo da conta Bancaria: " + primeiraCB.exibirSaldo());
+        System.out.println("Mostrar saldo da conta Especial: " + primeiraCE.exibirSaldo());
+        System.out.println("Mostrar saldo da conta Poupanca: " + primeiraCP.exibirSaldo());
+        
+        System.out.println("\nMostrar extrato da conta Bancaria:");
+
+        for(Historico h: primeiraCB.exibirExtrato()){
+            System.out.printf("Tipo de Movimentação: %s, Data da Movimentação: %s, Valor da MOvimentação: %.2f\n",
+                h.tipoMovimentacao(), h.dataMovimentacao(), h.valor());
+        }
+        System.out.println("\nMostrar extrato da conta Especial:");
+
+        for(Historico h: primeiraCE.exibirExtrato()){
+            System.out.printf("Tipo de Movimentação: %s, Data da Movimentação: %s, Valor da MOvimentação: %.2f\n",
+                h.tipoMovimentacao(), h.dataMovimentacao(), h.valor());
+        }
+        System.out.println("\nMostrar extrato da conta Poupanca:");
+
+        for(Historico h: primeiraCP.exibirExtrato()){
+            System.out.printf("Tipo de Movimentação: %s, Data da Movimentação: %s, Valor da MOvimentação: %.2f\n",
+                h.tipoMovimentacao(), h.dataMovimentacao(), h.valor());
         }
         
-        List<Historico> extrato1 = cb.exibirExtrato();
-        System.out.println("Mostrando Extrato da Conta Bancaria:");
-        for (Historico h : extrato1) {
-            System.out.println("Tipo de Movimentação: " + h.tipoMovimentacao() + "\nData da Movimentação: "
-                    + h.dataMovimentacao() + "\nValor da Movimentação: " + h.valor());
-        }
-        System.out.println("\n");
-
-        //################## Demonstração de Conta Especial #######################################################
-        Conta ce = ContaFactory.criarContaEspecial(1, 200, "Rafael Borges", 500.0);
-        Resultado<Boolean> depositado2 = ce.depositar(500.0);
-
-        if (depositado2.retorno() == false) {
-            System.out.println("Deu erro no deposito na Conta Especial: " + depositado2.erro());
-            return;
-        }
-        Resultado<Boolean> saque2 = ce.sacar(600.0);
-
-        if (saque2.retorno() == false) {
-            System.out.println("Deu erro no saque na Conta Especial: " + saque2.erro());
-            return;
-        }
-
-        System.out.println("Saldo da conta bancaria: " + ((ContaBancaria)cb).getSaldo());
-        System.out.println("Saldo da conta especial: " + ((ContaBancaria)ce).getSaldo());
-
-        Resultado<Boolean> transferido = cb.transferir(100.0, (ContaBancaria)ce);
-
-        if (transferido.retorno() == false) {
-            System.out.println("Deu erro na transferia para Conta Especial: " + transferido.erro());
-            return;
-        } else {
-            System.out.println("Saldo da conta bancaria: " + ((ContaBancaria)cb).getSaldo());
-            System.out.println("Saldo da conta especial: " + ((ContaBancaria)ce).getSaldo());
-            System.out.println("Transferencia concluida com sucesso!");
-        }
-        
-        List<Historico> extrato2 = ce.exibirExtrato();
-        System.out.println("Mostrando Extrato da Conta Especial:");
-
-        for (Historico h : extrato2) {
-            System.out.println("Tipo de Movimentação: " + h.tipoMovimentacao() + "\nData da Movimentação: "
-                    + h.dataMovimentacao() + "\nValor da Movimentação: " + h.valor());
-        }
-        System.out.println("\n"); 
-
-
-        //################## Demonstração de Conta poupança #######################################################
-        Conta cp = ContaFactory.criarContaPoupanca(1, 200, "Rafael Borges", 0.005);
-        Resultado<Boolean> depositado3 = cp.depositar(500.0);
-
-        if (depositado3.retorno() == false) {
-            System.out.println("Deu erro no deposito na Conta Poupança: " + depositado3.erro());
-            return;
-        }
-        Resultado<Boolean> saque3 = cp.sacar(500.0);
-
-        if (saque3.retorno() == false) {
-            System.out.println("Deu erro no saque na Conta Poupança: " + saque3.erro());
-            return;
-        }
-
-        System.out.println("Saldo da conta bancaria: " + ((ContaBancaria)cb).getSaldo());
-        System.out.println("Saldo da conta especial: " + ((ContaBancaria)cp).getSaldo());
-
-        Resultado<Boolean> transferido2 = ce.transferir(100.0, (ContaBancaria)cp);
-
-        if (transferido2.retorno() == false) {
-            System.out.println("Deu erro na transferia para Conta Poupança: " + transferido2.erro());
-            return;
-        } else {
-            System.out.println("Saldo da conta bancaria: " + ((ContaBancaria)cb).getSaldo());
-            System.out.println("Saldo da conta poupanca: " + ((ContaBancaria)cp).getSaldo());
-            System.out.println("Transferencia concluida com sucesso!");
-        }
-        
-        List<Historico> extrato3 = cp.exibirExtrato();
-        System.out.println("Mostrando Extrato da Conta Poupança:"); 
-
-        for (Historico h : extrato3) {
-            System.out.println("Tipo de Movimentação: " + h.tipoMovimentacao() + "\nData da Movimentação: "
-                    + h.dataMovimentacao() + "\nValor da Movimentação: " + h.valor());
-        }
     }
 }
