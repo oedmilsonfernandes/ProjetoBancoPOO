@@ -29,7 +29,7 @@ public class ContaEspecial extends ContaBancaria{
         }
         
         if(super.getSaldo() + this.limite - valor < 0){
-            return new Resultado<Boolean>(false, "O valor do saque é inviavel!");
+            return new Resultado<Boolean>(false, "A conta não tem saldo para esse saque!");
         }
         
         super.setSaldo(super.getSaldo() - valor);
@@ -76,15 +76,15 @@ public class ContaEspecial extends ContaBancaria{
     @Override
     public Resultado<Boolean> bloquearConta() {
         if(super.getSaldo() > 0){
-            return new Resultado<Boolean>(false, "Ainda há saldo!");
+            return new Resultado<Boolean>(false, "A conta não pode ser bloqueada, pois ainda há saldo!");
         }
 
         if(super.getSaldo() < 0){
-            return new Resultado<Boolean>(false, "Ainda há debito!");
+            return new Resultado<Boolean>(false, "A conta não pode ser bloqueada, pois ainda há debito!");
         }
 
         if(super.getAtiva() == false){
-            return new Resultado<Boolean>(false, "Conta já está bloqueada");
+            return new Resultado<Boolean>(false, "A conta não pode ser bloqueada, pois já está bloqueada!");
         }
 
         super.setAtiva(false);
