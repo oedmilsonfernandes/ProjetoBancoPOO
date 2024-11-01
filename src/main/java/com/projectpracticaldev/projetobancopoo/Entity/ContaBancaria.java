@@ -94,7 +94,7 @@ public class ContaBancaria implements Conta {
         }
         
         if( this.saldo - valor < 0){
-            return new Resultado<Boolean>(false, "O valor do saque é inviavel!");
+            return new Resultado<Boolean>(false, "A conta não tem saldo para esse saque!");
         }
         
         this.saldo -= valor;

@@ -35,4 +35,37 @@ public class ContaBancariaTest {
         assertEquals("O valor do deposito é negativo!", depositou.erro());
         assertEquals(true, c.getListaHistorico().isEmpty());
     }
+
+    @Test
+    public void naoDeveSacarPorTerValorNegativo(){
+        ContaBancaria c = createConta();
+        Resultado<Boolean> sacou = c.sacar(-100.0);
+
+        assertEquals(false, sacou.retorno());
+        assertEquals("O valor do saque é negativo!", sacou.erro());
+        assertEquals(true, c.getListaHistorico().isEmpty());
+    }
+
+    @Test
+    public void naoDeveSacarPorqueNaoTemSaldoSuficiente(){
+        ContaBancaria c = createConta();
+        Resultado<Boolean> sacou = c.sacar(100.0);
+
+        assertEquals(false, sacou.retorno());
+        assertEquals("A conta não tem saldo para esse saque!", sacou.erro());
+        assertEquals(true, c.getListaHistorico().isEmpty());
+    }
+
+    @Test
+    public void deveSacar(){
+        ContaBancaria c = createConta();
+        c.depositar(100.0);
+
+        Resultado<Boolean> sacou = c.sacar(100.0);
+
+        assertEquals(true, sacou.retorno());
+        assertEquals(0, c.getSaldo());
+        assertEquals("Saque", c.getListaHistorico().get(1).tipoMovimentacao());
+        assertEquals(100.0, c.getListaHistorico().get(1).valor());
+    }
 }
