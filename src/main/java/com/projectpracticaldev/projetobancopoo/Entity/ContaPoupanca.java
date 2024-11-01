@@ -102,4 +102,15 @@ public class ContaPoupanca extends ContaBancaria implements Aplicacao{
         return new Resultado<Boolean>(true, null);
     }
 
+    @Override
+    public Resultado<Boolean> bloquearConta() {
+        Resultado<Boolean> bloqueou = super.bloquearConta();
+
+        if(!bloqueou.retorno()){
+            return bloqueou;
+        }
+
+        this.dataUltimaMovimentacao = null;
+        return new Resultado<Boolean>(true, null);
+    }
 }
