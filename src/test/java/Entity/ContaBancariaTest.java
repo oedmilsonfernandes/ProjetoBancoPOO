@@ -163,4 +163,24 @@ public class ContaBancariaTest {
         assertEquals(true, bloqueou.retorno());
         assertEquals(false, c.getAtiva());
     }
+
+    @Test
+    public void naoDeveDesbloquearPorqueJaEstaDesbloqueada(){
+        ContaBancaria c = createConta();
+        Resultado<Boolean> desbloqueou = c.desbloquearConta();
+
+        assertEquals(false, desbloqueou.retorno());
+        assertEquals("A conta não pode ser desbloqueada, pois já está desbloqueada!", desbloqueou.erro());
+    }
+
+    @Test
+    public void deveDesbloquear(){
+        ContaBancaria c = createConta();
+        c.setAtiva(false);
+        Resultado<Boolean> desbloqueou = c.desbloquearConta();
+
+        assertEquals(true, desbloqueou.retorno());
+        assertEquals(true, c.getAtiva());
+    }
+
 }

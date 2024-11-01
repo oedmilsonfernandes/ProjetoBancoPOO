@@ -172,7 +172,7 @@ public class ContaBancaria implements Conta {
     @Override
     public Resultado<Boolean> desbloquearConta() {
         if(this.ativa == true){
-            return new Resultado<Boolean>(false, "Conta já está desbloqueada");
+            return new Resultado<Boolean>(false, "A conta não pode ser desbloqueada, pois já está desbloqueada!");
         }
 
         this.ativa = true;
