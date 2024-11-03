@@ -1,7 +1,6 @@
 package com.projectpracticaldev.projetobancopoo.Entity;
 
 import java.util.List;
-import com.projectpracticaldev.utils.Resultado;
 
 public interface Conta {
     public Resultado<Boolean> depositar(Double valor);

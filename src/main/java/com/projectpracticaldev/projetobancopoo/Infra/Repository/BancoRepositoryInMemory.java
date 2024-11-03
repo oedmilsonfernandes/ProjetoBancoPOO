@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import com.projectpracticaldev.projetobancopoo.Entity.Banco;
 import com.projectpracticaldev.projetobancopoo.UseCases.Protocols.CadastrarBancoRepository;
-import com.projectpracticaldev.utils.Resultado;
+import com.projectpracticaldev.projetobancopoo.Entity.Resultado;
 
 public class BancoRepositoryInMemory implements CadastrarBancoRepository {
 
@@ -19,16 +19,16 @@ public class BancoRepositoryInMemory implements CadastrarBancoRepository {
     public Resultado<Boolean> verSeBancoJaExiste(String nome) {
         for(Banco b : bancos){
             if(b.getNome() == nome){
-                return new Resultado<Boolean>(true, "Esse nome de banco já existe!");
+                return Resultado.sucesso(true);
             }
         }
-        return new Resultado<Boolean>(false,null);
+        return Resultado.falhou("Esse nome de banco não existe!");
     }
 
     @Override
     public Resultado<Boolean> salvar(Banco banco) {
         bancos.add(banco);
-        return new Resultado<Boolean>(true,null);
+        return Resultado.sucesso(true);
     }
 
 }

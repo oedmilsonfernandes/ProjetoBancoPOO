@@ -8,7 +8,7 @@ import com.projectpracticaldev.projetobancopoo.Entity.Banco;
 import com.projectpracticaldev.projetobancopoo.Infra.Repository.BancoRepositoryInMemory;
 import com.projectpracticaldev.projetobancopoo.UseCases.CadastrarBanco;
 import com.projectpracticaldev.projetobancopoo.UseCases.Protocols.CadastrarBancoRepository;
-import com.projectpracticaldev.utils.Resultado;
+import com.projectpracticaldev.projetobancopoo.Entity.Resultado;
 
 public class CadastrarBancoTest {
 
@@ -22,7 +22,7 @@ public class CadastrarBancoTest {
         
         Resultado<Boolean> output = cadastrarBanco.execute(nome, agencia);
 
-        assertEquals(true, output.retorno());
+        assertEquals(true, output.sucesso());
     }
 
     @Test
@@ -35,8 +35,8 @@ public class CadastrarBancoTest {
         
         Resultado<Boolean> output = cadastrarBanco.execute(nome, agencia);
 
-        assertEquals(false, output.retorno());
-        assertEquals("O nome deve conter pelo menos 5 caracteres!", output.erro());
+        assertEquals(false, output.sucesso());
+        assertEquals("O nome deve conter pelo menos 5 caracteres!", output.pegarMensagemDeErro());
     }
 
     @Test
@@ -51,8 +51,8 @@ public class CadastrarBancoTest {
         
         Resultado<Boolean> output = cadastrarBanco.execute(nome, agencia);
 
-        assertEquals(false, output.retorno());
-        assertEquals("Esse nome de banco já existe!", output.erro());
+        assertEquals(false, output.sucesso());
+        assertEquals("Esse nome de banco já existe!", output.pegarMensagemDeErro());
     }
 
     @Test
@@ -65,8 +65,8 @@ public class CadastrarBancoTest {
         
         Resultado<Boolean> output = cadastrarBanco.execute(nome, agencia);
 
-        assertEquals(false, output.retorno());
-        assertEquals("O Numero da agencia é negativo!", output.erro());
+        assertEquals(false, output.sucesso());
+        assertEquals("O Numero da agencia é negativo!", output.pegarMensagemDeErro());
     }
 
 }

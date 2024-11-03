@@ -3,7 +3,7 @@ package Entity;
 import org.junit.jupiter.api.Test;
 
 import com.projectpracticaldev.projetobancopoo.Entity.ContaEspecial;
-import com.projectpracticaldev.utils.Resultado;
+import com.projectpracticaldev.projetobancopoo.Entity.Resultado;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,8 +20,8 @@ public class ContaEspecialTest {
         ContaEspecial c = createConta();
         Resultado<Boolean> sacou = c.sacar(-100.0);
 
-        assertEquals(false, sacou.retorno());
-        assertEquals("O valor do saque é negativo!", sacou.erro());
+        assertEquals(false, sacou.sucesso());
+        assertEquals("O valor do saque é negativo!", sacou.pegarMensagemDeErro());
         assertEquals(true, c.getListaHistorico().isEmpty());
     }
 
@@ -30,8 +30,8 @@ public class ContaEspecialTest {
         ContaEspecial c = createConta();
         Resultado<Boolean> sacou = c.sacar(510.0);
 
-        assertEquals(false, sacou.retorno());
-        assertEquals("A conta não tem saldo para esse saque!", sacou.erro());
+        assertEquals(false, sacou.sucesso());
+        assertEquals("A conta não tem saldo para esse saque!", sacou.pegarMensagemDeErro());
         assertEquals(true, c.getListaHistorico().isEmpty());
     }
 
@@ -42,7 +42,7 @@ public class ContaEspecialTest {
 
         Resultado<Boolean> sacou = c.sacar(100.0);
 
-        assertEquals(true, sacou.retorno());
+        assertEquals(true, sacou.sucesso());
         assertEquals(0, c.getSaldo());
         assertEquals("Saque", c.getListaHistorico().get(1).tipoMovimentacao());
         assertEquals(100.0, c.getListaHistorico().get(1).valor());
@@ -54,8 +54,8 @@ public class ContaEspecialTest {
         ContaEspecial aux = createConta();
         Resultado<Boolean> transferiu = c.transferir(-100.0, aux);
 
-        assertEquals(false, transferiu.retorno());
-        assertEquals("O valor da transferencia é negativo!", transferiu.erro());
+        assertEquals(false, transferiu.sucesso());
+        assertEquals("O valor da transferencia é negativo!", transferiu.pegarMensagemDeErro());
         assertEquals(true, c.getListaHistorico().isEmpty());
     }
 
@@ -65,8 +65,8 @@ public class ContaEspecialTest {
         ContaEspecial aux = createConta();
         Resultado<Boolean> transferiu = c.transferir(510.0, aux);
 
-        assertEquals(false, transferiu.retorno());
-        assertEquals("A conta não tem saldo para essa transferencia!", transferiu.erro());
+        assertEquals(false, transferiu.sucesso());
+        assertEquals("A conta não tem saldo para essa transferencia!", transferiu.pegarMensagemDeErro());
         assertEquals(true, c.getListaHistorico().isEmpty());
     }
 
@@ -78,7 +78,7 @@ public class ContaEspecialTest {
 
         Resultado<Boolean> transferiu = c.transferir(100.0, c2);
 
-        assertEquals(true, transferiu.retorno());
+        assertEquals(true, transferiu.sucesso());
         assertEquals(false, c.getListaHistorico().isEmpty());
         assertEquals(true, c.getListaHistorico().get(1).tipoMovimentacao().startsWith("Transferencia para"));
         assertEquals(100.0, c.getListaHistorico().get(1).valor());
@@ -95,8 +95,8 @@ public class ContaEspecialTest {
         c.depositar(100.0);
         Resultado<Boolean> bloqueou = c.bloquearConta();
 
-        assertEquals(false, bloqueou.retorno());
-        assertEquals("A conta não pode ser bloqueada, pois ainda há saldo!", bloqueou.erro());
+        assertEquals(false, bloqueou.sucesso());
+        assertEquals("A conta não pode ser bloqueada, pois ainda há saldo!", bloqueou.pegarMensagemDeErro());
     }
 
     @Test
@@ -105,8 +105,8 @@ public class ContaEspecialTest {
         c.sacar(100.0);
         Resultado<Boolean> bloqueou = c.bloquearConta();
 
-        assertEquals(false, bloqueou.retorno());
-        assertEquals("A conta não pode ser bloqueada, pois ainda há debito!", bloqueou.erro());
+        assertEquals(false, bloqueou.sucesso());
+        assertEquals("A conta não pode ser bloqueada, pois ainda há debito!", bloqueou.pegarMensagemDeErro());
     }
 
     @Test
@@ -115,8 +115,8 @@ public class ContaEspecialTest {
         c.setAtiva(false);
         Resultado<Boolean> bloqueou = c.bloquearConta();
 
-        assertEquals(false, bloqueou.retorno());
-        assertEquals("A conta não pode ser bloqueada, pois já está bloqueada!", bloqueou.erro());
+        assertEquals(false, bloqueou.sucesso());
+        assertEquals("A conta não pode ser bloqueada, pois já está bloqueada!", bloqueou.pegarMensagemDeErro());
     }
 
     @Test
@@ -124,7 +124,7 @@ public class ContaEspecialTest {
         ContaEspecial c = createConta();
         Resultado<Boolean> bloqueou = c.bloquearConta();
 
-        assertEquals(true, bloqueou.retorno());
+        assertEquals(true, bloqueou.sucesso());
         assertEquals(false, c.getAtiva());
     }
 }

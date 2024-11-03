@@ -6,7 +6,6 @@ package com.projectpracticaldev.projetobancopoo.Entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import com.projectpracticaldev.utils.Resultado;
 
 /**
  *
@@ -80,26 +79,26 @@ public class ContaBancaria implements Conta {
     @Override
     public Resultado<Boolean> depositar(Double valor) {
         if(valor < 0){
-            return new Resultado<Boolean>(false, "O valor do deposito é negativo!");
+            return Resultado.falhou("O valor do deposito é negativo!");
         }
         this.saldo += valor;
         this.listaHistorico.add(new Historico("Deposito", LocalDateTime.now(), valor));
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 
     @Override
     public Resultado<Boolean> sacar(Double valor) {
         if(valor < 0){
-            return new Resultado<Boolean>(false, "O valor do saque é negativo!");
+            return Resultado.falhou("O valor do saque é negativo!");
         }
         
         if( this.saldo - valor < 0){
-            return new Resultado<Boolean>(false, "A conta não tem saldo para esse saque!");
+            return Resultado.falhou("A conta não tem saldo para esse saque!");
         }
         
         this.saldo -= valor;
         this.listaHistorico.add(new Historico("Saque", LocalDateTime.now(), valor));
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 
     @Override
@@ -115,11 +114,11 @@ public class ContaBancaria implements Conta {
     @Override
     public Resultado<Boolean> transferir(Double valor, ContaBancaria destino) {
         if(valor < 0){
-            return new Resultado<Boolean>(false, "O valor da transferencia é negativo!");
+            return Resultado.falhou("O valor da transferencia é negativo!");
         }
         
         if( this.saldo - valor < 0){
-            return new Resultado<Boolean>(false, "A conta não tem saldo para essa transferencia!");
+            return Resultado.falhou("A conta não tem saldo para essa transferencia!");
         }
         
         this.saldo -= valor;
@@ -132,19 +131,19 @@ public class ContaBancaria implements Conta {
         DadosBancarios remetente = new DadosBancarios(numero, agencia, cliente);
         Resultado<Boolean> transferido = destino.receberTransferencia(valor, remetente);
 
-        if(!transferido.retorno()){
+        if(!transferido.sucesso()){
             this.saldo += valor;
             this.listaHistorico.remove(h);
             return transferido;
         }
 
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 
     @Override
     public Resultado<Boolean> receberTransferencia(Double valor, DadosBancarios remetente) {
         if(valor < 0){
-            return new Resultado<Boolean>(false, "O valor da transferencia é negativo!");
+            return Resultado.falhou("O valor da transferencia é negativo!");
         }
 
         this.saldo += valor;
@@ -152,30 +151,30 @@ public class ContaBancaria implements Conta {
             String.format("Transferencia de {numero: %d, agencia: %d, cliente: %s}",
                 remetente.numero(), remetente.agencia(), remetente.cliente()),
             LocalDateTime.now(), valor));
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 
     @Override
     public Resultado<Boolean> bloquearConta() {
         if(this.saldo > 0){
-            return new Resultado<Boolean>(false, "A conta não pode ser bloqueada, pois ainda há saldo!");
+            return Resultado.falhou("A conta não pode ser bloqueada, pois ainda há saldo!");
         }
 
         if(this.ativa == false){
-            return new Resultado<Boolean>(false, "A conta não pode ser bloqueada, pois já está bloqueada!");
+            return Resultado.falhou("A conta não pode ser bloqueada, pois já está bloqueada!");
         }
 
         this.ativa = false;
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 
     @Override
     public Resultado<Boolean> desbloquearConta() {
         if(this.ativa == true){
-            return new Resultado<Boolean>(false, "A conta não pode ser desbloqueada, pois já está desbloqueada!");
+            return Resultado.falhou("A conta não pode ser desbloqueada, pois já está desbloqueada!");
         }
 
         this.ativa = true;
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 }

@@ -2,7 +2,6 @@ package com.projectpracticaldev.projetobancopoo.Entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import com.projectpracticaldev.utils.Resultado;
 
 
 public class ContaEspecial extends ContaBancaria{
@@ -25,11 +24,11 @@ public class ContaEspecial extends ContaBancaria{
     @Override
     public Resultado<Boolean> sacar(Double valor) {
         if(valor < 0){
-            return new Resultado<Boolean>(false, "O valor do saque é negativo!");
+            return Resultado.falhou("O valor do saque é negativo!");
         }
         
         if(super.getSaldo() + this.limite - valor < 0){
-            return new Resultado<Boolean>(false, "A conta não tem saldo para esse saque!");
+            return Resultado.falhou("A conta não tem saldo para esse saque!");
         }
         
         super.setSaldo(super.getSaldo() - valor);
@@ -38,17 +37,17 @@ public class ContaEspecial extends ContaBancaria{
         lh.add(new Historico("Saque", LocalDateTime.now(), valor));
         super.setListaHistorico(lh);
         
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 
     @Override
     public Resultado<Boolean> transferir(Double valor, ContaBancaria destino) {
         if(valor < 0){
-            return new Resultado<Boolean>(false, "O valor da transferencia é negativo!");
+            return Resultado.falhou("O valor da transferencia é negativo!");
         }
         
         if(super.getSaldo() + this.limite - valor < 0){
-            return new Resultado<Boolean>(false, "A conta não tem saldo para essa transferencia!");
+            return Resultado.falhou("A conta não tem saldo para essa transferencia!");
         }
         
         super.setSaldo(super.getSaldo() - valor);
@@ -63,32 +62,32 @@ public class ContaEspecial extends ContaBancaria{
         DadosBancarios remetente = new DadosBancarios(super.getNumero(), super.getAgencia(), super.getCliente());
         Resultado<Boolean> transferido = destino.receberTransferencia(valor, remetente);
 
-        if(!transferido.retorno()){
+        if(!transferido.sucesso()){
             super.setSaldo(super.getSaldo() + valor);
             lh.remove(h);
             return transferido;
         }
 
         super.setListaHistorico(lh);
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 
     @Override
     public Resultado<Boolean> bloquearConta() {
         if(super.getSaldo() > 0){
-            return new Resultado<Boolean>(false, "A conta não pode ser bloqueada, pois ainda há saldo!");
+            return Resultado.falhou("A conta não pode ser bloqueada, pois ainda há saldo!");
         }
 
         if(super.getSaldo() < 0){
-            return new Resultado<Boolean>(false, "A conta não pode ser bloqueada, pois ainda há debito!");
+            return Resultado.falhou("A conta não pode ser bloqueada, pois ainda há debito!");
         }
 
         if(super.getAtiva() == false){
-            return new Resultado<Boolean>(false, "A conta não pode ser bloqueada, pois já está bloqueada!");
+            return Resultado.falhou("A conta não pode ser bloqueada, pois já está bloqueada!");
         }
 
         super.setAtiva(false);
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 
 }

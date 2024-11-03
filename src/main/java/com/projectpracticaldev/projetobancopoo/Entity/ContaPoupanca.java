@@ -3,7 +3,7 @@ package com.projectpracticaldev.projetobancopoo.Entity;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import com.projectpracticaldev.utils.Resultado;
+
 
 public class ContaPoupanca extends ContaBancaria implements Aplicacao{
     private LocalDateTime dataUltimaMovimentacao;
@@ -35,11 +35,11 @@ public class ContaPoupanca extends ContaBancaria implements Aplicacao{
     @Override
     public Resultado<Boolean> calcularRendimento(LocalDateTime hoje) {
         if(!super.getAtiva()){
-            return new Resultado<Boolean>(false, "Conta bloqueada!");
+            return Resultado.falhou("Conta bloqueada!");
         }
 
         if(!hoje.isAfter(this.dataUltimaMovimentacao)){
-            return new Resultado<Boolean>(false, "Data para o calculo invalida!");
+            return Resultado.falhou("Data para o calculo invalida!");
         }
 
         // Calculando a diferença em meses
@@ -49,12 +49,12 @@ public class ContaPoupanca extends ContaBancaria implements Aplicacao{
         long difDias = ChronoUnit.DAYS.between(this.dataUltimaMovimentacao.plusMonths(difMeses), hoje);
 
         if(difMeses < 1 || difDias != 0){
-            return new Resultado<Boolean>(false, "Não virou o mês ainda para fazer o calculo!");
+            return Resultado.falhou("Não virou o mês ainda para fazer o calculo!");
         }
 
         Double novoSaldo = super.getSaldo() * Math.pow((1 + this.taxaJuros), difMeses);
         super.setSaldo(novoSaldo);
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 
 
@@ -62,55 +62,55 @@ public class ContaPoupanca extends ContaBancaria implements Aplicacao{
     public Resultado<Boolean> depositar(Double valor) {
         Resultado<Boolean> deposito = super.depositar(valor);
 
-        if(!deposito.retorno()){
+        if(!deposito.sucesso()){
             return deposito;
         }
         this.dataUltimaMovimentacao = LocalDateTime.now();
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 
     @Override
     public Resultado<Boolean> sacar(Double valor) {
         Resultado<Boolean> saque = super.sacar(valor);
 
-        if(!saque.retorno()){
+        if(!saque.sucesso()){
             return saque;
         }
         this.dataUltimaMovimentacao = LocalDateTime.now();
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 
     @Override
     public Resultado<Boolean> transferir(Double valor, ContaBancaria destino) {
         Resultado<Boolean> transferencia = super.transferir(valor, destino);
 
-        if(!transferencia.retorno()){
+        if(!transferencia.sucesso()){
             return transferencia;
         }
         this.dataUltimaMovimentacao = LocalDateTime.now();
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 
     @Override
     public Resultado<Boolean> receberTransferencia(Double valor, DadosBancarios remetente) {
         Resultado<Boolean> transferido = super.receberTransferencia(valor, remetente);
 
-        if(!transferido.retorno()){
+        if(!transferido.sucesso()){
             return transferido;
         }
         this.dataUltimaMovimentacao = LocalDateTime.now();
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 
     @Override
     public Resultado<Boolean> bloquearConta() {
         Resultado<Boolean> bloqueou = super.bloquearConta();
 
-        if(!bloqueou.retorno()){
+        if(!bloqueou.sucesso()){
             return bloqueou;
         }
 
         this.dataUltimaMovimentacao = null;
-        return new Resultado<Boolean>(true, null);
+        return Resultado.sucesso(true);
     }
 }
