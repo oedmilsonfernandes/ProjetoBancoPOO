@@ -5,12 +5,14 @@ import java.util.ArrayList;
 
 import com.projectpracticaldev.projetobancopoo.Entity.Banco;
 import com.projectpracticaldev.projetobancopoo.UseCases.Protocols.BuscarBancoRepository;
+import com.projectpracticaldev.projetobancopoo.UseCases.Protocols.BuscarBancosRepository;
 import com.projectpracticaldev.projetobancopoo.UseCases.Protocols.CadastrarBancoRepository;
 import com.projectpracticaldev.projetobancopoo.Entity.Resultado;
 
 public class BancoRepositoryInMemory implements 
         CadastrarBancoRepository,
-        BuscarBancoRepository {
+        BuscarBancoRepository,
+        BuscarBancosRepository {
 
     private List<Banco> bancos;
 
@@ -42,6 +44,11 @@ public class BancoRepositoryInMemory implements
             }
         }
         return Resultado.falhou("Banco não encontrado!");
+    }
+
+    @Override
+    public Resultado<List<Banco>> buscarBancos() {
+        return Resultado.sucesso(bancos);
     }
 
 }
