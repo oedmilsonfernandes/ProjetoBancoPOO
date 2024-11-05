@@ -7,12 +7,14 @@ import com.projectpracticaldev.projetobancopoo.Entity.Banco;
 import com.projectpracticaldev.projetobancopoo.UseCases.Protocols.BuscarBancoRepository;
 import com.projectpracticaldev.projetobancopoo.UseCases.Protocols.BuscarBancosRepository;
 import com.projectpracticaldev.projetobancopoo.UseCases.Protocols.CadastrarBancoRepository;
+import com.projectpracticaldev.projetobancopoo.UseCases.Protocols.VerificarBancoRepository;
 import com.projectpracticaldev.projetobancopoo.Entity.Resultado;
 
 public class BancoRepositoryInMemory implements 
         CadastrarBancoRepository,
         BuscarBancoRepository,
-        BuscarBancosRepository {
+        BuscarBancosRepository,
+        VerificarBancoRepository {
 
     private List<Banco> bancos;
 
@@ -49,6 +51,16 @@ public class BancoRepositoryInMemory implements
     @Override
     public Resultado<List<Banco>> buscarBancos() {
         return Resultado.sucesso(bancos);
+    }
+
+    @Override
+    public Resultado<Boolean> verSeBancoExiste(Integer agencia) {
+        for(Banco b : bancos){
+            if(b.getAgencia() == agencia){
+                return Resultado.sucesso(true);
+            }
+        }
+        return Resultado.falhou("Essa agencia de banco não existe!");
     }
 
 }
