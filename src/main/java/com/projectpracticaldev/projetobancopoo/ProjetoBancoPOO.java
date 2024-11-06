@@ -3,13 +3,13 @@
  */
 
 package com.projectpracticaldev.projetobancopoo;
+
 /**
- *
  * @author edmilson
  */
 public class ProjetoBancoPOO {
 
-    public static void main(String[] args) {
-        System.out.println("Aguardando inicialização...");
-    }
+  public static void main(String[] args) {
+    System.out.println("Aguardando inicialização...");
+  }
 }
